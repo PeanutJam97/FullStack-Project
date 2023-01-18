@@ -43,6 +43,7 @@ const NavBar = () => {
                         <Route path="/register" element />
                         <Route path="/CreateAccount" element={<CreateAccount />}/>
                         <Route path="/ChangeAccount" element />
+                        <Route path="/Projects" element />
                     </Routes>
                 </div>
             </div>    

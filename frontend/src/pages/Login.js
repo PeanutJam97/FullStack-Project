@@ -3,7 +3,9 @@ import Input from "react-validation/build/input";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import CheckButton from "react-validation/build/button";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import AuthContext from "../Store/auth-context";
 
 const required = (value) => {
     if (!value) {
@@ -19,9 +21,13 @@ const Login = () => {
 
     const form = useRef();
     const checkBtn = useRef();
+    const navigate = useNavigate();
     const[email, SetEmail] = useState('');
     const[password, SetPassword] = useState('')
     const [showPassword, SetShowPassword] = useState(false)
+    const [isloading, SetIsLoading] = useState(false)
+
+    const authCtx = useContext(AuthContext);
 
     const EmailChangeHandler = (e) => {
         SetEmail(e.target.value)
@@ -35,12 +41,40 @@ const Login = () => {
         SetShowPassword((showPassword) => (!showPassword))
     };
 
-    const SubmitHandler = (e) => {
+    const SubmitHandler = async (e) => {
         e.preventDefault();
 
         form.current.validateAll();
 
+        SetIsLoading(true);
 
+        if (checkBtn.current.context._errors.length === 0) {
+            try {
+                const response = await fetch('http://localhost:5000/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+
+                const responseData = await response.json();
+                console.log(responseData)
+                if (!response.ok) {
+                    throw new Error(responseData.message);
+                }
+                SetIsLoading(false);
+                authCtx.login(responseData.token);
+                navigate("/Projects")
+            } catch (err) {
+                SetIsLoading(false)
+                alert(err.message)
+            }
+        }
     }
 
 
@@ -81,7 +115,12 @@ const Login = () => {
                 </div>
                 <div className="form-group">
                     <Button type="submit" variant="warning">
-                        Login
+                        {isloading && (
+                        <span className="spinner-border spinner-border-sm"></span>
+                        )}
+                        {!isloading && (
+                        <span>Login</span>
+                        )}
                     </Button>
                 </div>
                 <CheckButton style={{display: "none"}} ref={checkBtn}/>

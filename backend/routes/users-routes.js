@@ -22,7 +22,11 @@ router.post(
     usersController.signup
   );
   
-  router.post('/login', usersController.login);
+router.post('/login', usersController.login);
+
+router.post('/changepassword', usersController.changepassword);
+
+router.post('/changeemail', usersController.changeemail);
   
-  module.exports = router;
+module.exports = router;
   

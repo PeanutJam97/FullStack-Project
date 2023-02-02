@@ -125,7 +125,7 @@ const Login = () => {
                 </div>
                 <CheckButton style={{display: "none"}} ref={checkBtn}/>
                 <p style={{textAlign: "center" }}>
-                    <a href="/register">Click here to create account</a>
+                    <a href="/CreateAccount">Click here to create account</a>
                 </p>
             </Form>
         </div>

@@ -163,6 +163,81 @@ const login = async (req, res, next) => {
     });
 };
 
+const changepassword = async (req, res, next) => {
+    const { email, password } = req.body
+
+    let hashedPassword;
+    try {
+      hashedPassword = await bcrypt.hash(password, 12);
+    } catch (err) {
+        const error = new HttpError('Could not create user, please try again.',
+        500
+      );
+      return next(error);
+    };
+
+    let existingUser
+    try {
+      existingUser = await User.findOne({ email: email })
+      existingUser.password = hashedPassword
+      existingUser.save()
+    } catch (err) {
+      const error = new HttpError(
+        'Searching for existing email, please try again later.',
+        500
+      );
+      return next(error);
+    }
+
+    if (!existingUser) {
+      const error = new HttpError(
+        'No such email, could not change password.',
+        401
+      );
+      return next(error);
+    }
+
+    res.json({ 
+      userId: existingUser.id, 
+      email: existingUser.email, 
+    });
+
+}
+
+const changeemail = async (req, res, next) => {
+  const { email } = req.body
+
+  let existingUser
+  try {
+    existingUser = await User.findOne({ email: email })
+    existingUser.email = email
+    existingUser.save()
+  } catch (err) {
+    const error = new HttpError(
+      'Searching for existing email, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  if (!existingUser) {
+    const error = new HttpError(
+      'No such email, could not change email.',
+      401
+    );
+    return next(error);
+  }
+
+  res.json({ 
+    userId: existingUser.id, 
+    email: existingUser.email, 
+  });
+
+}
+
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
+exports.changepassword = changepassword;
+exports.changeemail = changeemail;

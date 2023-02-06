@@ -12,6 +12,7 @@ import Project1 from '../pages/Project1';
 import ChangeEmailPass from '../pages/ChangeEmailPass';
 import ChangeEmail from '../pages/ChangeEmail';
 import ChangePassword from '../pages/ChangePassword';
+import App1 from '../pages/App1';
 
 
 const NavBar = () => {
@@ -35,11 +36,11 @@ const NavBar = () => {
                         <Nav className="me-auto">
                             {isLoggedin && <Nav.Link href="/">Home</Nav.Link>}
                             {isLoggedin && <NavDropdown title="Applications" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="App1">App 1</NavDropdown.Item>
-                                <NavDropdown.Item href="App2">
+                                {isLoggedin && <NavDropdown.Item href="App1">App 1</NavDropdown.Item>}
+                                {isLoggedin && <NavDropdown.Item href="App2">
                                     App 2
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="App3">App 3</NavDropdown.Item>
+                                </NavDropdown.Item>}
+                                {isLoggedin && <NavDropdown.Item href="App3">App 3</NavDropdown.Item>}
                             </NavDropdown>}
                         </Nav>
                         <Nav>
@@ -66,6 +67,7 @@ const NavBar = () => {
                         {isLoggedin && <Route path="/changepassword" element={<ChangePassword />} />}
                         {isLoggedin && <Route path="/editinfo" element={<ChangeEmailPass />} />}
                         {isLoggedin && <Route path="/Projects" element={<Project1 />}/>}
+                        {isLoggedin && <Route path="/App1" element={<App1 />}/>}
                     </Routes>
                 </div>
             </div>    

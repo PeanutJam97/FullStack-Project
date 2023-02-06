@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { BudgetsProvider } from './Store/BudgetsContext';
 import "bootstrap/dist/css/bootstrap.min.css"
 import { AuthContextProvider } from './Store/auth-context';
 
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContextProvider>
     <BrowserRouter>
-      <App />
+      <BudgetsProvider>
+        <App />
+      </BudgetsProvider>
     </BrowserRouter>
   </AuthContextProvider>
 );
